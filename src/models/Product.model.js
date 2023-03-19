@@ -6,6 +6,9 @@ const ProductSchema = Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String
+    },
     price: {
         type: Number,
         required: true
@@ -20,17 +23,14 @@ const ProductSchema = Schema({
         type: Number,
         required: true
     },
-    detailInfor: {
-        color: Array,
-        productor: String,
-        description: String
-    },
+    productor: String,
+    color: Array,
     category: {
-        type: string
+         type: Schema.Types.ObjectId, ref: 'categorys', 
     }
     
     
 }, {timestamps: true});
 
 
-module.exports = mongoose.model('products', UserSchema);
+module.exports = mongoose.model('products', ProductSchema);

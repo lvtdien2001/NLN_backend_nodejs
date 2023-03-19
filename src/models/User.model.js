@@ -12,7 +12,7 @@ const UserSchema = Schema({
         unique: true
     },  
     password: {type: String, required: true, minlength: 8,},
-    admin:{
+    isAdmin:{
         type: Boolean,
         default: false,
     },
@@ -28,19 +28,9 @@ const UserSchema = Schema({
         type: Boolean,
         default: false
     },
-    address:{
-        description: String,
-        provinceName: String,
-        districtName: String,
-        wardName: String,
+    address:{ 
+        type: Schema.Types.ObjectId, ref: 'address'
     },
-    cart: [
-        {
-            productID: { type: Schema.Types.ObjectId, ref: 'products' },
-            quantiry: Number,
-        }
-    ]
-    ,
     image: {
         type: String
     },

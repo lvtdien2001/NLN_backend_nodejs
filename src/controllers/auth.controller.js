@@ -24,7 +24,7 @@ exports.getUser = async (req, res) => {
 }
 
 exports.register = async (req, res, next) => {
-    const {username, password,  gender, firstName, lastName } = req.body;
+    const {username, password,  gender, fullName } = req.body;
     // simple validation
     if (!username || !password)
         return res.status(400).json({success:false, message: 'Missing username/password'})
@@ -48,9 +48,7 @@ exports.register = async (req, res, next) => {
             'https://res.cloudinary.com/dkzebfbq2/image/upload/v1667321172/avatardefault_zo3shv.png' :
             'https://res.cloudinary.com/dkzebfbq2/image/upload/v1676716155/1000_F_279669366_Lk12QalYQKMczLEa4ySjhaLtx1M2u7e6_sozfwx.jpg' ,
             gender,
-            yourId: `${username}${firstName}`,
-            firstName,
-            lastName,
+            fullName,
             username,
             password: hashedPassword,
         })
@@ -105,20 +103,15 @@ exports.login = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
     try {
-        const {gender, firstName, lastName , email, phone, yourId} = req.body
+        const {gender, phoneNumber, fullName} = req.body
         let updateInfo = {
             gender,
-            firstName, 
-            lastName,
-            email,
-            phone,
-            yourId
+            phoneNumber,
+            fullName
+          
         };
-        const newId = await User.findOne({yourId});
-        if (newId) {
-            res.status(400).json({success: true, message:'Id này đã tồn tại !!'})
-        }
-        const infoUpdateCondition = {_id: req.params.id};
+        
+        const infoUpdateCondition = {_id: req.userId};
         updateInfo = await User.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true});
         
 
@@ -155,7 +148,7 @@ exports.updateImage = async (req, res, next) => {
             image: result.secure_url,
             cloudinary_id: result.public_id,
         };
-        const infoUpdateCondition = {_id: req.params.id};
+        const infoUpdateCondition = {_id: req.userId};
 
             updateInfo = await User.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true});
 
