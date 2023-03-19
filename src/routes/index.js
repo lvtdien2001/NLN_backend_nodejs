@@ -1,12 +1,13 @@
 
 
 const authRouter = require('./Auth.route');
-const productRouter = require('./Product.route');
+const categoryRouter = require('./Category.route');
+
 function route(app) {
    
   
     app.use('/api/auth', authRouter);
-    app.use('/api/products', productRouter);
+    app.use('/api/category', categoryRouter);
     
     
 }

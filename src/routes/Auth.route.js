@@ -10,8 +10,9 @@ router.post('/login', authController.login);
 router.get('/', verifyToken, authController.getUser);
 
 
-router.put('/:id',verifyToken ,authController.updateUser);
-router.put('/image/:id',verifyToken , upload.single('image'),authController.updateImage);
+router.put('/',verifyToken ,authController.updateUser);
+router.put('/image',verifyToken , upload.single('image'),authController.updateImage);
+
 
 
 module.exports = router;

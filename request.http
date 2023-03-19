@@ -1,51 +1,41 @@
-POST http://localhost:5000/auth/register
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "vinhky2012",
-    "password": "vinhky2012"
+    "username": "admin",
+    "password": "admin",  
+    "gender": true,
+    "fullName": "Do vinh ky"
 
 }
 ###
-POST http://localhost:5000/auth/login
+POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "admin1",
-    "password": "12345678"
+    "username": "admin",
+    "password": "admin"
 }
 
 ###
-
-GET http://localhost:5000/posts?limit=5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjA2OWJhODA1ZThiNTY5NzMyMGEiLCJpYXQiOjE2NzYzNzAyNTR9.9CJ9D6PYyF1cEER-6oemF_IfTlyMlWtGiioLGZFugRY
-
-
-###
-
-GET http://localhost:5000/posts/63f38f1273ee60892be35cf4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YzM2E3MjE1OWIwMThjOTEzOWVlZTAiLCJpYXQiOjE2NzcwMDAxNjB9.eFhABJezJB9Rh8tn6spldGH-En1GDAPpAmHm4ncM9ms
-###
-
-PATCH   http://localhost:5000/posts/63eb6120ba805e8b56973219
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2U0ZjdiNDIzODhkMGRkMDY3OTViNjYiLCJpYXQiOjE2NzYzNzA2NTN9.N9Z-gjfpc4-yjUT8qZn-MGmckoHqMG0o5fLONuhXq10
-
-###
-
-GET http://localhost:5000/auth/search?q=a
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjA2OWJhODA1ZThiNTY5NzMyMGEiLCJpYXQiOjE2NzYzNzAyNTR9.9CJ9D6PYyF1cEER-6oemF_IfTlyMlWtGiioLGZFugRY
-
-
-###
-
-GET http://localhost:5000/search/searchID?yourId=admin1
-
-
-###
-PUT http://localhost:5000/posts/comment/63f491325f865c1e9ba6026c
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YzM2E3MjE1OWIwMThjOTEzOWVlZTAiLCJpYXQiOjE2NzcwMDAxNjB9.eFhABJezJB9Rh8tn6spldGH-En1GDAPpAmHm4ncM9ms
+GET http://localhost:5000/api/auth
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkwNjY5OTR9.u5S9Mu-ZUxVeJzjTXjY6wZVJfCj7mUm9Gn-zX5DgbRg
 
 {
-    "text" : "Comment ne hihi 6"
+    "phoneNumber":"0123456789",
+    "gender": true,
+    "fullName": "Do vinh ky"
+
 }
+
+###
+POST http://localhost:5000/api/category
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkwNjk5NDR9.sxZieqvgKs7ZrBglasit4yooMxfndeHxBcb3Mx8CSjM
+
+{
+    "category":"Iphone"
+}
+
+###
