@@ -14,7 +14,7 @@ router.post('/', verifyToken, verifyAdmin, upload.array('images') ,ProductContro
 // update information product
 router.put('/:id', verifyToken, verifyAdmin, ProductController.updateInformationProduct);
 
-// get all product
+// get all products
 router.get('/', ProductController.getAllProducts);
 
 

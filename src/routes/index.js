@@ -3,6 +3,7 @@
 const authRouter = require('./Auth.route');
 const categoryRouter = require('./Category.route');
 const productorRouter = require('./Productor.route');
+
 const productRouter = require('./Product.route');
 function route(app) {
    
