@@ -9,6 +9,7 @@ const CategoryController = require('../controllers/category.controller');
 
 router.post('/',verifyToken ,CategoryController.createCategory);
 
+router.get('/',verifyToken ,CategoryController.getCategory);
 
 
 

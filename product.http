@@ -1,0 +1,33 @@
+###
+// login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+# Product
+
+###
+// Get all product
+GET http://localhost:5000/api/product?pageSize=2&page=3
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzkzMDU2OTh9.1yF2Ftp9LxTpuGiyr0Fc7CN4dO9YL_o1J4dCJAIwoWA
+
+
+
+###
+// Update product
+PUT http://localhost:5000/api/product/64170f366336ece293ea585a
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzkzMDU2OTh9.1yF2Ftp9LxTpuGiyr0Fc7CN4dO9YL_o1J4dCJAIwoWA
+
+{
+    "name":" update sản phẩm 1",
+    "description":"update sản phẩm 1 mô tả",
+    "price": 200,
+    "currentQuantity": 500,
+    "color": ["yellow","black"]
+}

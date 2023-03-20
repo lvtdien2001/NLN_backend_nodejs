@@ -23,10 +23,12 @@ const ProductSchema = Schema({
         type: Number,
         required: true
     },
-    productor: String,
+    productor: {
+        type: Schema.Types.ObjectId, ref: 'productors', 
+   },
     color: Array,
     category: {
-         type: Schema.Types.ObjectId, ref: 'categorys', 
+         type: Schema.Types.ObjectId, ref: 'categories', 
     }
     
     

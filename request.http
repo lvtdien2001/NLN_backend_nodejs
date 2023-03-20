@@ -2,8 +2,8 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin",  
+    "username": "admin2",
+    "password": "admin2",  
     "gender": true,
     "fullName": "Do vinh ky"
 
@@ -18,16 +18,18 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/api/auth
+PUT http://localhost:5000/api/auth
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkwNjY5OTR9.u5S9Mu-ZUxVeJzjTXjY6wZVJfCj7mUm9Gn-zX5DgbRg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkzMDU1NTN9.bqn2CLYb_lVC_Iz4uLlwjcsY8nfLI-ee7ca3FpnxFaw
 
 {
     "phoneNumber":"0123456789",
     "gender": true,
-    "fullName": "Do vinh ky"
-
+    "fullName": "Do vinh ky2"
 }
+
+
+# Category
 
 ###
 POST http://localhost:5000/api/category
@@ -35,7 +37,13 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkwNjk5NDR9.sxZieqvgKs7ZrBglasit4yooMxfndeHxBcb3Mx8CSjM
 
 {
-    "category":"Iphone"
+    "category":"Tablet"
 }
 
 ###
+
+GET http://localhost:5000/api/category
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpYXQiOjE2NzkwNjk5NDR9.sxZieqvgKs7ZrBglasit4yooMxfndeHxBcb3Mx8CSjM
+
+
