@@ -13,6 +13,7 @@ const verifyToken = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, secret);
         req.userId = decoded.userId;
+        req.isAdmin = decoded.isAdmin;
         next();
     } catch (error) {
         console.log(error);

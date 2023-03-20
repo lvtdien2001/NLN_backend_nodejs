@@ -56,7 +56,7 @@ exports.register = async (req, res, next) => {
 
         // Return token
         const secret = process.env.ACCESS_TOKEN_SECRECT
-        const accessToken = jwt.sign({userId: newUser._id},secret )
+        const accessToken = jwt.sign({userId: newUser._id,isAdmin: user.isAdmin},secret )
 
         res.status(200).json({success: true, message:'User has created successfully', accessToken})
     } catch (error) {
@@ -90,7 +90,7 @@ exports.login = async (req, res, next) => {
         
         // Return token
         const secret = process.env.ACCESS_TOKEN_SECRECT
-        const accessToken = jwt.sign({userId: user._id},secret )
+        const accessToken = jwt.sign({userId: user._id, isAdmin: user.isAdmin},secret )
   
         res.status(200).json({success: true, message:'Logged in successfully', accessToken})
 

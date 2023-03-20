@@ -8,18 +8,31 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 exports.createCategory = async (req, res) => {
-    const {category, quantiy} = req.body;
+    const {category} = req.body;
     try {
         
        
         const newCategory = new Category({
-            category,
-            quantiy
+            category
         })
 
         await newCategory.save();
        
         res.status(200).json({success: true, message: "Created successfully", newCategory})
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({success: false, message: 'Internal server error', api:'get Change router'});
+    }
+}
+
+exports.getCategory = async (req, res) => {
+
+    try {
+        
+        const allCategory = await Category.find();
+       
+        res.status(200).json({success: true, message: "get Category successfully", allCategory})
 
     } catch (error) {
         console.log(error);
