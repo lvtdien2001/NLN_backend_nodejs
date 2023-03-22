@@ -16,6 +16,6 @@ router.put('/:id', verifyToken, verifyAdmin, ProductController.updateInformation
 
 // get all products
 router.get('/', ProductController.getAllProducts);
-
+router.get('/:id', ProductController.getProductById);
 
 module.exports = router;

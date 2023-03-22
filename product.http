@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ###
 // Get all product
-GET http://localhost:5000/api/product?pageSize=2&page=3
+GET http://localhost:5000/api/product?pageSize=3&page=1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDE0ODYwM2U1NzcxZTU1NGUzNDMzNGYiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzkzMDU2OTh9.1yF2Ftp9LxTpuGiyr0Fc7CN4dO9YL_o1J4dCJAIwoWA
 

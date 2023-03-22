@@ -91,6 +91,31 @@ exports.getAllProducts = async (req, res) => {
     }
 }
 
+// method GET api/product
+// get All products
+// public
+exports.getProductById = async (req, res) => {
+   
+    try {
+       
+       
+        const product = await Product.findById(req.params.id)
+                                .populate('category',['category', '_id'])
+                                .populate('productor',['_id','name', 'description', 'image'])
+                                
+
+       
+       
+       
+        
+       
+        res.status(200).json({success: true, message: "get all Products successfully", product})
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({success: false, message: 'Internal server error', api:'get Change router'});
+    }
+}
 
 // method PUT api/product/:id
 // update information product
