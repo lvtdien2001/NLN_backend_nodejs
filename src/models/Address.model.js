@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AddressSchema = Schema({
-    phone: {
+    phoneNumber: {
         type: String
     },
     fullName: {
