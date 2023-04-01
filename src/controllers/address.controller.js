@@ -7,8 +7,10 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-
-exports.createProductor = async (req, res) => {
+// POST /api/address
+// create a new address
+// having token
+exports.create = async (req, res) => {
     const {phoneNumber,
         fullName,
         province,
@@ -18,7 +20,7 @@ exports.createProductor = async (req, res) => {
         ward,
         wardCode,
         description} = req.body;
-    if(!fullName || !phoneNumber || !provinceCode || !districtCode || !wardCode || !province || !description) {
+    if(!fullName || !phoneNumber || !provinceCode || !districtCode || !wardCode || !description) {
         return res.status(400).json({success: false, message: "Missing field"})
     }
     try {
@@ -37,7 +39,8 @@ exports.createProductor = async (req, res) => {
             districtCode,
             ward,
             wardCode,
-            description
+            description,
+            user: req.userId
         })
 
         await newAddress.save();
@@ -46,7 +49,20 @@ exports.createProductor = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({success: false, message: 'Internal server error', api:'get Change router'});
+        res.status(500).json({success: false, message: 'Internal server error'});
+    }
+}
+
+exports.delete = async (req, res) => {
+    try {
+        const addressCondition = {_id: req.params.id, user: req.userId}
+
+        await Address.deleteOne(addressCondition);
+
+        res.status(200).json({success: true, message: "Deleted Address successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({success: false, message: 'Internal server error'});
     }
 }
 

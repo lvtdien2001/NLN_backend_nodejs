@@ -24,9 +24,9 @@ const cloudinaryImageUploadMethod = async file => {
 // create product
 // having token and isAdmin = true
 exports.createProduct = async (req, res) => {
-    const {name, description, price, currentQuantity, color} = req.body;
-    if(!name || !description || !price || !currentQuantity) {
-        return res.status(400).json({success: false, message: "Missing field"})
+    const {name} = req.body;
+    if(!name ) {
+        return res.status(400).json({success: false, message: "Vui lòng nhập tên sản phẩm"})
     }
     try {
         const urls = [];
@@ -43,12 +43,6 @@ exports.createProduct = async (req, res) => {
        
         const newProduct = new Product({
             name,
-            description,
-            price,
-            currentQuantity,
-            color,
-            images: urls.map( url => url.res ),
-            userID: req.userId,
             category,
             productor
 
@@ -78,16 +72,11 @@ exports.getAllProducts = async (req, res) => {
                                 .populate('category',['category', '_id'])
                                 .populate('productor',['_id','name', 'description', 'image'])
 
-       
-       
-       
-        
-       
         res.status(200).json({success: true, message: "get all Products successfully", allProducts})
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({success: false, message: 'Internal server error', api:'get Change router'});
+        res.status(500).json({success: false, message: 'Internal server error', api:'get Change router a'});
     }
 }
 
@@ -103,12 +92,6 @@ exports.getProductById = async (req, res) => {
                                 .populate('category',['category', '_id'])
                                 .populate('productor',['_id','name', 'description', 'image'])
                                 
-
-       
-       
-       
-        
-       
         res.status(200).json({success: true, message: "get all Products successfully", product})
 
     } catch (error) {

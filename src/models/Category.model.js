@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const CategorySchema = Schema({
     category: {
         type: String,
-        enum: ['Laptop', 'Tablet', 'Smartphone','Iphone']
+        //enum: ['phone', 'Tablet', 'Smartphone','Iphone']
     }
     
 }, {timestamps: true});

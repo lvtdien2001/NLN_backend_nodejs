@@ -7,7 +7,8 @@ const ProductorSchema = Schema({
         required: true
     },
     description: {
-        type: String
+        type: String,
+        default: ''
     },
     image: String,
     cloudinary_id : String,

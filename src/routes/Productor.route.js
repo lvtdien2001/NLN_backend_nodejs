@@ -10,6 +10,7 @@ const ProductorController = require('../controllers/productor.controller');
 
 
 router.post('/', verifyToken, verifyAdmin, upload.single('image') ,ProductorController.createProductor);
+// router.post('/', verifyToken, verifyAdmin, ProductorController.createProductor);
 
 router.get('/', verifyToken, ProductorController.getProductor);
 

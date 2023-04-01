@@ -3,24 +3,19 @@ const Schema = mongoose.Schema;
 
 const OrdersSchema = Schema({
     user: { type: Schema.Types.ObjectId, ref: 'users' },
-    products: [
-        {
-            productID: { type: Schema.Types.ObjectId, ref: 'products' },
-            quantity: String,
-            amount: Number
-        }
-    ],
-    totalAmount: {
-        type: Number,
-        required: true
-    },
     status: {
         type: String,
-        enum: ['waiting', 'beingTransported', 'received']
+        enum: ['Đang đợi duyệt', 'Đang vận chuyển', 'Đã nhận', 'Đã hủy', 'Đã trả hàng']
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['Thanh toán trực tuyến', 'Thanh toán khi nhận hàng']
+    },
+    isPayment: {
+        type: Boolean,
+        default: false
     }
-    
-    
 }, {timestamps: true});
 
 
-module.exports = mongoose.model('orders', UserSchema);
+module.exports = mongoose.model('orders', OrdersSchema);

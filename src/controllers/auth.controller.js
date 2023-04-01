@@ -2,20 +2,26 @@ const argon2 = require('argon2')
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User.model');
+const Address = require('../models/Address.model');
 const cloudinary = require('../utils/cloudinary');
 
 const dotenv = require('dotenv');
+
 
 dotenv.config();
 
 exports.getUser = async (req, res) => {
     try {
-        const user = await User.findById(req.userId).select('-password');
+        const user = await User.findById(req.userId)
+                    .populate('address',['-user'])
+                    .select('-password');
+        const addressCondition = {user: req.userId}
+        const allAddresses = await Address.find(addressCondition).select('-user');
         if(!user) {
             return res.status(400).json({success: false, message:'User not found'})
         }
 
-        res.json({success: true, user})
+        res.json({success: true, user, allAddresses})
 
     } catch (error) {
         console.log(error);
@@ -24,14 +30,15 @@ exports.getUser = async (req, res) => {
 }
 
 exports.register = async (req, res, next) => {
-    const {username, password,  gender, fullName } = req.body;
+    const {username, password,  gender, fullName} = req.body;
     // simple validation
     if (!username || !password)
         return res.status(400).json({success:false, message: 'Missing username/password'})
         
     try {
         // check for exiting id
-        const user = await User.findOne({username});
+        const user = await User.findOne({username})
+                                    
         
 
       
@@ -51,12 +58,13 @@ exports.register = async (req, res, next) => {
             fullName,
             username,
             password: hashedPassword,
+            isAdmin:false
         })
         await newUser.save();
 
         // Return token
         const secret = process.env.ACCESS_TOKEN_SECRECT
-        const accessToken = jwt.sign({userId: newUser._id,isAdmin: user.isAdmin},secret )
+        const accessToken = jwt.sign({userId: newUser._id,isAdmin: false},secret )
 
         res.status(200).json({success: true, message:'User has created successfully', accessToken})
     } catch (error) {
@@ -123,6 +131,35 @@ exports.updateUser = async (req, res, next) => {
            
             
             res.status(200).json({success: true, message: 'Bạn đã cập nhật thông tin thành công !!!', info: updateInfo});
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: error
+        });
+    }
+}
+
+exports.updateAddress = async (req, res, next) => {
+    try {
+        
+        let updateInfo = {
+           address: req.params.id
+        };
+        
+        const infoUpdateCondition = {_id: req.userId};
+        updateInfo = await User.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true});
+        
+
+            // user not authorised to update post or post not found
+            if (!updateInfo) {
+                return res.status(401).json({success: false, message:'Không thể cập nhật'})
+            }
+            
+           
+            
+            res.status(200).json({success: true, message: 'Bạn đã cập nhật thông tin thành công !!!'});
 
         
     } catch (error) {
