@@ -13,7 +13,7 @@ const DetailProductSchema = Schema({
     },
     color: {
         type: String,
-        default: ''
+        default: null
     },
     image: {
         type: String,
@@ -25,7 +25,7 @@ const DetailProductSchema = Schema({
     },
     size: {
         type: String,
-        default: ''
+        default: null
     },
     cloudinary_id: {
         type: String

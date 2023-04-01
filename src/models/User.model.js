@@ -29,7 +29,7 @@ const UserSchema = Schema({
         default: false
     },
     address:{ 
-        type: Schema.Types.ObjectId, ref: 'address'
+        type: Schema.Types.ObjectId, ref: 'addresses'
     },
     image: {
         type: String
