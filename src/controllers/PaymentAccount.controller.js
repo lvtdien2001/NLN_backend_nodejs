@@ -8,6 +8,7 @@ exports.create = async (req, res) => {
     try {
         const { balance, password } = req.body;
         const user = req.userId;
+
         //Check user has account?
         const accountUser = await PaymentAccount.findOne({ user });
         if (accountUser){
@@ -41,8 +42,8 @@ exports.create = async (req, res) => {
     }
 }
 
-// @route POST /api/payment
-// @desc create a payment for user
+// @route GET /api/payment
+// @desc get a payment for user
 // @access protected (customer)
 exports.findOne = async (req, res) => {
     try {
@@ -69,13 +70,33 @@ exports.findOne = async (req, res) => {
     }
 }
 
-// @route PUT /api/payment
+// @route PUT /api/payment/money
 // @desc update info payment account
 // @access protected (customer)
-exports.update = async (req, res) => {
+exports.updateMoney = async (req, res) => {
     try {
         const user = req.userId;
-        const { password } = req.body;
+        const { money, password } = req.body;
+
+        const account = await PaymentAccount.findOne({user})
+
+        // Verify password
+        const passwordValid = await argon2.verify(account.password, password);
+        if(!passwordValid) {
+            return res.status(400).json({success: false, message: 'Incorrect password'});
+        }
+
+        const updateCondition = {user}
+
+        await PaymentAccount.findOneAndUpdate(
+            updateCondition,
+            { balance: account.balance - money }
+        )
+
+        res.json({
+            success: true,
+            message: 'Payment successfully'
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({

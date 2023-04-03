@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const verifyToken = require('../middleware/auth')
+const upload = require('../utils/multer');
+const Category = require('../controllers/category.controller');
 
-const CategoryController = require('../controllers/category.controller');
 
 
+router.post('/',verifyToken, upload.single('image') ,Category.createCategory);
 
-router.post('/',verifyToken ,CategoryController.createCategory);
-
-router.get('/', CategoryController.getCategory);
+router.get('/', Category.getCategory);
 
 
 

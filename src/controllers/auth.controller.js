@@ -172,13 +172,13 @@ exports.updateAddress = async (req, res, next) => {
 
 exports.updateImage = async (req, res, next) => {
     try {
-        const person = await User.findById(req.params.id);
+        const person = await User.findById(req.userId);
         if(person.cloudinary_id) {
             await cloudinary.uploader.destroy(person.cloudinary_id);
         }
        
         
-        const result = await cloudinary.uploader.upload(req.file.path,{ folder: "avatar" });
+        const result = await cloudinary.uploader.upload(req.file.path,{ folder: "avatarUser" });
         
 
         let updateInfo = {

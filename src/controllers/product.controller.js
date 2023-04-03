@@ -1,4 +1,5 @@
 
+const DetailProduct = require('../models/DetailProduct.model');
 const Product = require('../models/Product.model');
 
 const cloudinary = require('../utils/cloudinary');
@@ -29,13 +30,7 @@ exports.createProduct = async (req, res) => {
         return res.status(400).json({success: false, message: "Vui lòng nhập tên sản phẩm"})
     }
     try {
-        const urls = [];
-        const files = req.files;
-        for (const file of files) {
-          const { path } = file;
-          const newPath = await cloudinaryImageUploadMethod(path);
-          urls.push(newPath);
-        }
+        const result = await cloudinary.uploader.upload(req.file.path,{ folder: "products" });
        
         
 
@@ -44,7 +39,9 @@ exports.createProduct = async (req, res) => {
         const newProduct = new Product({
             name,
             category,
-            productor
+            productor,
+            image: result.secure_url,
+            cloudinary_id: result.public_id,
 
         })
 
@@ -71,7 +68,12 @@ exports.getAllProducts = async (req, res) => {
                                 .skip(skip)
                                 .populate('category',['category', '_id'])
                                 .populate('productor',['_id','name', 'description', 'image'])
-
+                                .sort({'createdAt': -1})
+       
+       
+       
+        
+       
         res.status(200).json({success: true, message: "get all Products successfully", allProducts})
 
     } catch (error) {
@@ -92,7 +94,13 @@ exports.getProductById = async (req, res) => {
                                 .populate('category',['category', '_id'])
                                 .populate('productor',['_id','name', 'description', 'image'])
                                 
-        res.status(200).json({success: true, message: "get all Products successfully", product})
+        const detailProduct = await DetailProduct.find({product:product._id})
+       
+       
+       
+        
+       
+        res.status(200).json({success: true, message: "get all Products successfully", product, detailProduct})
 
     } catch (error) {
         console.log(error);

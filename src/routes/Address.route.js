@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const verifyToken = require('../middleware/auth');
-const address  = require('../controllers/address.controller')
+const Address  = require('../controllers/Address.controller')
 
 
-router.post('/', verifyToken, address.create);
-router.delete('/:id', verifyToken, address.delete);
+router.post('/', verifyToken, Address.create);
+router.delete('/:id', verifyToken, Address.delete);
 
 module.exports = router

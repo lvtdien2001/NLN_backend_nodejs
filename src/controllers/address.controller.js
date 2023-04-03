@@ -1,8 +1,5 @@
 
 const Address = require('../models/Address.model');
-
-
-
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -24,11 +21,6 @@ exports.create = async (req, res) => {
         return res.status(400).json({success: false, message: "Missing field"})
     }
     try {
-       
-       
-        
-
-     
        
         const newAddress = new Address({
             phoneNumber,

@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 const CategorySchema = Schema({
     category: {
         type: String,
-        //enum: ['phone', 'Tablet', 'Smartphone','Iphone']
+    },
+    image: {
+        type:String
+    },
+    cloudinary_id : {
+        type:String
     }
     
 }, {timestamps: true});

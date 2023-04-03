@@ -1,4 +1,4 @@
-const Carts = require('../models/Carts.model');
+const Cart = require('../models/Cart.model');
 const Product = require('../models/Product.model');
 
 // @route GET /api/cart
@@ -6,7 +6,7 @@ const Product = require('../models/Product.model');
 // @access protected (customer)
 exports.findAll = async (req, res) => {
     try {
-        const cart = await Carts
+        const cart = await Cart
             .find({ user: req.userId })
             .populate(
                 'detailProduct', 
@@ -63,7 +63,7 @@ exports.create = async (req, res) => {
         const { quantity } = req.body;
         const detailProduct = req.params.productId;
 
-        const cart = await Carts.findOne({
+        const cart = await Cart.findOne({
             user,
             detailProduct
         })
@@ -74,7 +74,7 @@ exports.create = async (req, res) => {
                 detailProduct,
                 user
             }
-            const updateCart = await Carts.findOneAndUpdate(
+            const updateCart = await Cart.findOneAndUpdate(
                 updateCondition, 
                 {quantity: cart.quantity+quantity},
                 {new: true}
@@ -87,7 +87,7 @@ exports.create = async (req, res) => {
         }
 
         // Product haven't in the cart
-        const newCart = new Carts({
+        const newCart = new Cart({
             detailProduct,
             quantity,
             user
@@ -123,7 +123,7 @@ exports.update = async (req, res) => {
             _id: req.params.cartId,
             user: req.userId
         }
-        updateCart = await Carts.findOneAndUpdate(updateCondition, updateCart, {new:true});
+        updateCart = await Cart.findOneAndUpdate(updateCondition, updateCart, {new:true});
 
         //User not authorised to update cart or cart not found
         if (!updateCart){
@@ -158,7 +158,7 @@ exports.delete = async (req, res) => {
             _id: req.params.cartId,
             user: req.userId
         }
-        const deleteCart = await Carts.findOneAndDelete(deleteCondition);
+        const deleteCart = await Cart.findOneAndDelete(deleteCondition);
 
         // User not authorised or cart not found
         if (!deleteCart){

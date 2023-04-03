@@ -11,6 +11,12 @@ const ProductSchema = Schema({
    },
     category: {
          type: Schema.Types.ObjectId, ref: 'categories', 
+    },
+    image: {
+        type: String
+    },
+    cloudinary_id: {
+        type: String
     }
     
     

@@ -12,7 +12,7 @@ router.post('/', verifyToken, PaymentController.create);
 // @desc Get info account
 router.get('/', verifyToken, PaymentController.findOne);
 
-// @desc Update info account
-router.put('/', verifyToken, PaymentController.update);
+// @desc Update money
+router.put('/money', verifyToken, PaymentController.updateMoney);
 
 module.exports = router

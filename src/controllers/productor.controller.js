@@ -10,13 +10,16 @@ dotenv.config();
 
 exports.createProductor = async (req, res) => {
     const {name, description} = req.body;
-    if(!name) {
+    if(!name || !description) {
         return res.status(400).json({success: false, message: "Missing name or description"})
     }
     try {
        
         const result = await cloudinary.uploader.upload(req.file.path,{ folder: "avatar" });
         
+
+     
+       
         const newProductor = new Productor({
             name,
             description,

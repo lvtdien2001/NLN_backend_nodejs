@@ -3,33 +3,29 @@ const Schema = mongoose.Schema;
 
 const DetailProductSchema = Schema({
     product: {
-        type: Schema.Types.ObjectId,
-        ref: 'products',
-        required: true
+        type: Schema.Types.ObjectId, ref: 'products', 
     },
     price: {
-        type: Number,
-        default: 0
+        type: Number
     },
     color: {
-        type: String,
-        default: null
-    },
-    image: {
-        type: String,
-        default: ''
+        type: String
     },
     quantity: {
-        type: Number,
-        default: 0
+        type: Number
     },
     size: {
         type: String,
         default: null
     },
+    image: {
+        type: String
+    },
     cloudinary_id: {
         type: String
     }
+    
+    
 }, {timestamps: true});
 
 

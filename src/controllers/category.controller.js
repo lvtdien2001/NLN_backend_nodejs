@@ -1,7 +1,7 @@
 
 const Category = require('../models/Category.model');
 
-
+const cloudinary = require('../utils/cloudinary');
 
 const dotenv = require('dotenv');
 
@@ -10,10 +10,15 @@ dotenv.config();
 exports.createCategory = async (req, res) => {
     const {category} = req.body;
     try {
+        const result = await cloudinary.uploader.upload(req.file.path,{ folder: "category" });
+        
+
         
        
         const newCategory = new Category({
-            category
+            category,
+            image: result.secure_url,
+            cloudinary_id: result.public_id,
         })
 
         await newCategory.save();
