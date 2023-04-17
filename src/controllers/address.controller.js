@@ -1,5 +1,5 @@
-
 const Address = require('../models/Address.model');
+
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,12 +16,13 @@ exports.create = async (req, res) => {
         districtCode,
         ward,
         wardCode,
+
         description} = req.body;
     if(!fullName || !phoneNumber || !provinceCode || !districtCode || !wardCode || !description) {
         return res.status(400).json({success: false, message: "Missing field"})
     }
+
     try {
-       
         const newAddress = new Address({
             phoneNumber,
             fullName,
@@ -57,7 +58,3 @@ exports.delete = async (req, res) => {
         res.status(500).json({success: false, message: 'Internal server error'});
     }
 }
-
-
-
-

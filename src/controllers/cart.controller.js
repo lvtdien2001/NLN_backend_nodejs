@@ -1,5 +1,6 @@
 const Cart = require('../models/Cart.model');
 const Product = require('../models/Product.model');
+const DetailProduct = require('../models/DetailProduct.model');
 
 // @route GET /api/cart
 // @desc get all product in user's cart
@@ -8,42 +9,58 @@ exports.findAll = async (req, res) => {
     try {
         const cart = await Cart
             .find({ user: req.userId })
-            .populate(
-                'detailProduct', 
-                ['price', 'color', 'image', 'quantity', 'size', 'product']
-            )
+            .populate('detailProduct')
+        let names = [];
         
-        let result = [], count = 0;
-        cart.forEach(async product => {
-            // Get name product from Product Model
-            const getNameProduct = async () => {
-                const productInfo = await Product.findOne({ 
-                    _id: product.detailProduct.product 
-                });
-                return productInfo.name;
-            }
-            const name = await getNameProduct();
+        for (let i=0; i<cart.length; i++){
+            const productId = cart[i].detailProduct.product;
+            const product = await Product.findById(productId);
+            // console.log(product);
+            names.push(product.name);
+        }
 
-            // Format data will response
-            result.push({
-                cartId: product._id,
-                detailProductId: product.detailProduct._id,
-                name,
-                quantity: product.quantity,
-                price: product.detailProduct.price,
-                color: product.detailProduct.color,
-                image: product.detailProduct.image,
-                size: product.detailProduct.size,
-            })
-            count++;
+        res.json({
+            success: true,
+            cart,
+            names
+        })
+        // let result = [], count = 0;
+        // cart.forEach(async product => {
+        //     // Get name product from Product Model
+        //     const getNameProduct = async () => {
+        //         const productInfo = await Product.findOne({ 
+        //             _id: product.detailProduct.product 
+        //         });
+        //         return productInfo.name;
+        //     }
+        //     const name = await getNameProduct();
+
+        //     const detailProduct = {
+        //         id: product.detailProduct._id,
+        //         quantity: product.detailProduct.quantity
+        //     }
+
+        //     // Format data will response
+        //     result.push({
+        //         cartId: product._id,
+        //         productId: product.detailProduct.product,
+        //         detailProduct,
+        //         name,
+        //         quantity: product.quantity,
+        //         price: product.detailProduct.price,
+        //         color: product.detailProduct.color,
+        //         image: product.detailProduct.image,
+        //         size: product.detailProduct.size,
+        //     })
+        //     count++;
             
-            if (count===cart.length){
-                return res.json({
-                    success: true,
-                    cart: result
-                })
-            }
-        }) 
+        //     if (count===cart.length){
+        //         return res.json({
+        //             success: true,
+        //             cart: result
+        //         })
+        //     }
+        // }) 
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -63,12 +80,20 @@ exports.create = async (req, res) => {
         const { quantity } = req.body;
         const detailProduct = req.params.productId;
 
+        const product = await DetailProduct.findById(detailProduct);
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found'
+            })
+        }
+
         const cart = await Cart.findOne({
             user,
             detailProduct
         })
 
-        // Product have in the cart
+        // Product have been in the cart
         if (cart) {
             const updateCondition = {
                 detailProduct,
@@ -113,11 +138,24 @@ exports.create = async (req, res) => {
 // @desc update product information in user's cart
 // @access protected (customer)
 exports.update = async (req, res) => {
-    const { quantity } = req.body;
-
     try {
+        const cartId = req.params.cartId;
+
+        const cart = await Cart.findOne({ _id: cartId }).populate('detailProduct', ['quantity']);
+        const { detailProduct } = cart;
+
+        const orderQuantity = req.body.quantity;
+        const inventoryQuantity = detailProduct.quantity;
+
+        if (orderQuantity > inventoryQuantity){
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid quantity'
+            })
+        }
+
         let updateCart = {
-            quantity
+            quantity: orderQuantity
         }
         const updateCondition = {
             _id: req.params.cartId,

@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const OrdersSchema = Schema({
+const OrderSchema = Schema({
     user: { type: Schema.Types.ObjectId, ref: 'users' },
     status: {
         type: String,
-        enum: ['Đang đợi duyệt', 'Đang vận chuyển', 'Đã nhận', 'Đã hủy', 'Đã trả hàng']
+        default: 'Chờ xác nhận',
+        enum: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đang vận chuyển', 'Đã nhận', 'Đã hủy', 'Đã trả hàng']
     },
     products: [
         {
@@ -14,9 +15,13 @@ const OrdersSchema = Schema({
                 ref: 'detailproducts'
             },
             price: { type: Number },
-            quantity: { type: Number }
+            quantity: { type: Number },
+            name: {type: String}
         }
     ],
+    totalAmount: {
+        type: Number
+    },
     paymentMethod: {
         type: String,
         enum: ['Thanh toán trực tuyến', 'Thanh toán khi nhận hàng']
@@ -46,4 +51,4 @@ const OrdersSchema = Schema({
 }, {timestamps: true});
 
 
-module.exports = mongoose.model('orders', OrdersSchema);
+module.exports = mongoose.model('orders', OrderSchema);

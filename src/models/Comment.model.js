@@ -23,8 +23,7 @@ const CommentsSchema = new Schema({
     },
     rate: {
         type: Number,
-        default: 0,
-        enum: [0, 1, 2, 3, 4, 5]
+        enum: [ 1, 2, 3, 4, 5]
     }
 }, {timestamps: true})
 

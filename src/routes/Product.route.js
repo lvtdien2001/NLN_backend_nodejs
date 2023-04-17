@@ -26,4 +26,7 @@ router.get('/detail/:product', DetailProductController.getDetailProduct);
 router.get('/detail/hot/latest', DetailProductController.getHotProduct);
 //get suggest product
 router.get('/detail/suggest/latest', DetailProductController.getSuggestProduct);
+// get product by category
+router.get('/detail/category/:id', DetailProductController.findByCategory);
+
 module.exports = router;

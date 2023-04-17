@@ -9,8 +9,8 @@ const CommentController = require('../controllers/comment.controller');
 
 router.post('/',verifyToken ,CommentController.create);
 router.put('/:commentId',verifyToken ,CommentController.update);
-
- router.get('/',verifyToken ,CommentController.findByUser);
+router.get('/',verifyToken ,CommentController.findByUser);
+router.get('/:productId',CommentController.getCommentByProduct);
 
 
 

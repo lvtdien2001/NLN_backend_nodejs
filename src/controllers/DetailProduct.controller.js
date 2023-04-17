@@ -81,18 +81,28 @@ exports.getHotProduct = async (req, res) => {
     
     try {
         
-        const hotProduct = await DetailProduct.find().sort({"price": -1}).limit(4)
-                            
-       
-        
-       
-        res.status(200).json({success: true, message: "get hot product successfully", hotProduct})
+        const products = await DetailProduct.find().sort({"price": -1});
+
+        const hotProducts = [];
+        for (let i=0; hotProducts.length<4; i++){
+            let flag = false;
+            for (let j=0; j<hotProducts.length; j++){
+                if (products[i].product.toString() === hotProducts[j].product.toString())
+                    flag = true;
+                }
+            if (flag) continue;
+            hotProducts.push(products[i]);
+            
+        }
+     
+        res.status(200).json({success: true, message: "get hot product successfully", hotProducts})
 
     } catch (error) {
         console.log(error);
         res.status(500).json({success: false, message: 'Internal server error'});
     }
 }
+
 // method GET api/product/detail
 // get All products
 // public
@@ -100,12 +110,23 @@ exports.getSuggestProduct = async (req, res) => {
     
     try {
         
-        const suggestProduct = await DetailProduct.find().sort({"quantity": -1}).limit(12)
-                            
+        // const suggestProduct = await DetailProduct.find().sort({"quantity": -1}).limit(12)
+        const products = await DetailProduct
+            .find()
+            .populate('product', ['name']);
+        const suggestProducts = [];
+        for (let i=0; suggestProducts.length<12; i++){
+            let flag = false;
+            for (let j=0; j<suggestProducts.length; j++){
+                if (products[i].product._id.toString() === suggestProducts[j].product._id.toString())
+                    flag=true;
+                }
+            if (flag) continue;
+            suggestProducts.push(products[i]);
+            
+        }                    
        
-        
-       
-        res.status(200).json({success: true, message: "get suggest product successfully", suggestProduct})
+        res.status(200).json({success: true, message: "get suggest product successfully", suggestProducts})
 
     } catch (error) {
         console.log(error);
@@ -113,3 +134,45 @@ exports.getSuggestProduct = async (req, res) => {
     }
 }
 
+// @route /api/product/detail/category/:id
+// @desc get all product by category
+// @access public
+exports.findByCategory = async (req, res) => {
+    if (req.params.id === undefined){
+        return res.status(401).json({
+            success: false,
+            message: 'Category of params not found'
+        })
+    }
+    try {
+        const {id} = req.params;
+        const allProducts = await DetailProduct
+            .find()
+            .populate('product', ['category', 'name', 'productor'])
+        
+        const products = allProducts.filter(detail => detail.product.category.toString()===id);
+
+        const result = [];
+        for (let i=0; i<products.length; i++){
+            let flag = false;
+            for (let j=0; j<result.length; j++){
+                if (products[i].product._id.toString() === result[j].product._id.toString())
+                    flag=true;
+                }
+            if (flag) continue;
+            result.push(products[i]);
+            
+        }      
+
+        res.status(200).json({
+            success: true,
+            result
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}

@@ -8,7 +8,12 @@ exports.create = async (req, res) => {
         const user = req.userId;
         const product = req.query.productId;
         const { status, rate, content } = req.body;
-
+        if(!content || content === '') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid content'
+            })
+        }
         const newComment = new Comment({
             user,
             product,
@@ -32,21 +37,23 @@ exports.create = async (req, res) => {
         })
     }
 }
-// @route GET /api/comment
+// @route GET /api/comment?product=${productId}
 // @desc update comment
 // @access protected (customer)
 exports.findByUser = async (req, res) => {
     try {
         const user = req.userId;
-        const comments = await Comment
-        .find({
+        const product = req.query.product
+        const comment = await Comment 
+        .findOne({
             // user: user
-            user
+            user,
+            product
         })
         .populate('user', ['fullName', 'gender', 'image'])
-
+        
         // Neu k tim thay comment
-        if(!comments){
+        if(!comment){
             return res.status(400).json({
                 success: false,
                 message: 'Comment not found'
@@ -56,7 +63,7 @@ exports.findByUser = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Successlly',
-            comments
+            comment
         })
 
     }
@@ -78,9 +85,15 @@ exports.update = async (req, res) => {
         const commentId = req.params.commentId;
         
         const { rate, content } = req.body;
-        const comment = await Comment.findOne({_id: commentId});
+        const comment = await Comment.findOne({_id: commentId,user });
 
-        if (comment && comment.status===2) {
+        if(!comment){
+           return res.status(400).json({
+                success: false,
+                message: 'Comment not found or user not authoriused'
+            })
+        }
+        if (comment && comment.status === 2) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid comment'
@@ -92,8 +105,7 @@ exports.update = async (req, res) => {
         }
         const updateCondition = {
             _id: commentId,
-            user,
-            status: 0||1
+            user
         }
         updateComment = await Comment.findOneAndUpdate(updateCondition, updateComment, {new: true});
 
@@ -118,7 +130,7 @@ exports.update = async (req, res) => {
 // @access protected (customer)
 exports.getCommentByProduct = async (req, res) => {
     try {
-      const allComments = await Comment.find({product: req.params.product})
+      const allComments = await Comment.find({product: req.params.productId}).populate('user',['fullName','image'])
         
       res.json({
         success: true,

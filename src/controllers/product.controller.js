@@ -82,7 +82,7 @@ exports.getAllProducts = async (req, res) => {
     }
 }
 
-// method GET api/product
+// method GET api/product/:id
 // get All products
 // public
 exports.getProductById = async (req, res) => {
