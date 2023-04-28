@@ -11,10 +11,14 @@ const UserSchema = Schema({
         required: true,
         unique: true
     },  
-    password: {type: String, required: true, minlength: 8,},
+    password: {
+        type: String, 
+        required: true, 
+        minlength: 8
+    },
     isAdmin:{
         type: Boolean,
-        default: false,
+        default: false
     },
     cash:{
         type: Number,

@@ -11,7 +11,7 @@ router.get('/', verifyToken, authController.getUser);
 
 
 router.put('/',verifyToken ,authController.updateUser);
-router.put('/image',verifyToken , upload.single('image'),authController.updateImage);
+router.put('/image/avatar',verifyToken , upload.single('image'),authController.updateImage);
 
 // update address default
 router.put('/:id', verifyToken, authController.updateAddress)

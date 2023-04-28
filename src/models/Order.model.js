@@ -47,6 +47,18 @@ const OrderSchema = Schema({
     },
     description: {
         type: String
+    },
+    returnOrder: {
+        reason: {
+            type: String
+        },
+        image: {
+            type: String
+        },
+        isChecked: {
+            type: Boolean,
+            default: false
+        }
     }
 }, {timestamps: true});
 

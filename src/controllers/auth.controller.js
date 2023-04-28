@@ -172,7 +172,8 @@ exports.updateAddress = async (req, res, next) => {
 
 exports.updateImage = async (req, res, next) => {
     try {
-        const person = await User.findById(req.userId);
+        const person = await User.findById(req.userId)
+                                        
         if(person.cloudinary_id) {
             await cloudinary.uploader.destroy(person.cloudinary_id);
         }
@@ -187,8 +188,9 @@ exports.updateImage = async (req, res, next) => {
         };
         const infoUpdateCondition = {_id: req.userId};
 
-            updateInfo = await User.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true});
-
+            updateInfo = await User.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true})
+                                        .populate('address',['-user'])
+                                        .select('-password');
 
             // user not authorised to update post or post not found
             if (!updateInfo) {

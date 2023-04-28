@@ -1,7 +1,4 @@
-const argon2 = require('argon2');
-const PaymentAccount = require('../models/PaymentAccount.model');
 let $ = require('jquery');
-const dateFormat = require('dateformat');
 const moment = require('moment');
 
 const sortObject = obj => {
@@ -126,7 +123,94 @@ exports.checksum = async (req, res) => {
                         //that bai
                         //paymentStatus = '2'
                         // Ở đây cập nhật trạng thái giao dịch thanh toán thất bại vào CSDL của bạn
-                        res.status(200).json({RspCode: '00', Message: 'Success'})
+                        switch(rspCode){
+                            case '07':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).'
+                                    });
+                            case '09':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.'
+                                    });
+                            case '10':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần'
+                                    })
+                            case '10':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần'
+                                    })
+                            case '11':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.'
+                                    })
+                            case '12':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.'
+                                    })
+                            case '13':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.'
+                                    })
+                            case '24':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Khách hàng hủy giao dịch'
+                                    })
+                            case '51':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.'
+                                    })
+                            case '65':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.'
+                                    })
+                            case '75':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Ngân hàng thanh toán đang bảo trì.'
+                                    })
+                            case '79':
+                                return res
+                                    .status(200)
+                                    .json({
+                                        RspCode: rspCode, 
+                                        Message: 'Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch'
+                                    })
+                            default:
+                                return res.status(200).json({RspCode: rspCode, Message: 'Có lỗi xảy ra trong quá trình xử lý. Vui lòng liên hệ 1900 55 55 77 để được hỗ trợ'})
+                        }
                     }
                 }
                 else{

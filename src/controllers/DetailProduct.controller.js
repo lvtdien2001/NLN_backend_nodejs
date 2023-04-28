@@ -148,8 +148,13 @@ exports.findByCategory = async (req, res) => {
         const {id} = req.params;
         const allProducts = await DetailProduct
             .find()
-            .populate('product', ['category', 'name', 'productor'])
-        
+            .populate({
+                path:'product',
+                populate: {
+                    path:'productor'
+                }
+            })
+
         const products = allProducts.filter(detail => detail.product.category.toString()===id);
 
         const result = [];
@@ -176,3 +181,64 @@ exports.findByCategory = async (req, res) => {
         })
     }
 }
+
+
+// method PUT api/product/detail/:id
+// update information detail product
+// admin
+exports.updateDetailProduct = async (req, res, next) => {
+    const {price, quantity} = req.body;
+    if(!price) {
+        return res.status(400).json({success: false, message: "Thiếu thông tin !"})
+    }
+    try {
+        const detail = await DetailProduct.findOne({_id:req.params.id})
+        let updateInfo = {
+            price,
+            quantity: detail.quantity + quantity
+           
+          
+        };
+        
+        const infoUpdateCondition = {_id: req.params.id};
+        updateInfo = await DetailProduct.findOneAndUpdate(infoUpdateCondition, updateInfo, {new: true})
+                              
+  
+            // user not authorised to update post or post not found
+            if (!updateInfo) {
+                return res.status(401).json({success: false, message:'Không thể cập nhật'})
+            }
+            
+           
+            
+            res.status(200).json({success: true, message: 'Bạn đã cập nhật thông tin sản phẩm thành công !!!', detailProduct: updateInfo});
+  
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: error
+        });
+    }
+  }
+  
+  // method delete api/product/detail/:id
+  // delete detail product
+  // admin
+  exports.deleteDetailProduct = async (req, res, next) => {
+     
+      try {
+        const deleteDetailProduct = await DetailProduct.findOneAndDelete({_id: req.params.id})
+        await cloudinary.uploader.destroy(deleteDetailProduct.cloudinary_id);
+  
+        
+        res.status(200).json({success: true, message: 'Bạn đã xóa sản phẩm thành công !!!'});
+          
+      } catch (error) {
+          console.log(error);
+          res.status(500).json({
+              error: error
+          });
+      }
+    }
+  

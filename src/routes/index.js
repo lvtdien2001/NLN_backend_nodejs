@@ -8,6 +8,7 @@ const orderRouter = require('./Order.route');
 const CommentRouter = require('./Comment.route');
 const PaymentRouter = require('./Payment.route');
 const searchRouter = require('./Search.route');
+const userRoute = require('./User.route');
 
 function route(app) {
     app.use('/api/auth', authRouter);
@@ -20,6 +21,7 @@ function route(app) {
     app.use('/api/comment', CommentRouter);
     app.use('/api/order', orderRouter);
     app.use('/api/search', searchRouter);
+    app.use('/api/user', userRoute);
 }
 
 module.exports = route;

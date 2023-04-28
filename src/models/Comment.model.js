@@ -14,7 +14,7 @@ const CommentsSchema = new Schema({
     },
     status: {
         type: Number,
-        enum: [0, 1, 2], //0: create, 1: Đã comment, 2: Đã sửa rồi
+        // enum: [0, 1, 2], //0: create, 1: Đã comment, 2: Đã sửa rồi
         default: 0
     },
     content: {

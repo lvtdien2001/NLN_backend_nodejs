@@ -1,7 +1,7 @@
 const Products = require('../models/Product.model');
 const DetailProducts = require('../models/DetailProduct.model');
 
-// @route GET /api/product/search?q
+// @route GET /api/search?q
 // @desc Search products
 // @access public
 exports.findAll = async (req, res) => {
@@ -16,7 +16,7 @@ exports.findAll = async (req, res) => {
             })
         }
 
-        const products = await Products.find();
+        const products = await Products.find().populate('category').populate('productor');
 
         const searchResult = products.filter(product => {
             const name = product.name.toLowerCase();

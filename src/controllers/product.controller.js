@@ -2,6 +2,9 @@
 const DetailProduct = require('../models/DetailProduct.model');
 const Product = require('../models/Product.model');
 
+const Category = require('../models/Category.model');
+
+
 const cloudinary = require('../utils/cloudinary');
 
 const dotenv = require('dotenv');
@@ -60,17 +63,42 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
    
     try {
-       
-        const {page ,pageSize} = req.query;
-        const skip = (page - 1) * pageSize;
-        const allProducts = await Product.find()
-                                .limit(pageSize)
-                                .skip(skip)
-                                .populate('category',['category', '_id'])
-                                .populate('productor',['_id','name', 'description', 'image'])
-                                .sort({'createdAt': -1})
-       
-       
+        
+        // const allProducts = await Product.find()
+        //                         // .limit(pageSize)
+        //                         // .skip(skip)
+        //                         .populate('category',['category', '_id'])
+        //                         .populate('productor',['_id','name', 'description', 'image'])
+        //                         .sort({'createdAt': -1})
+        const allProducts = await Product
+                        .aggregate([
+                {
+                    $lookup: {
+                    from: 'detailproducts', // collection name of DetailProduct model
+                    localField: '_id',
+                    foreignField: 'product',
+                    as: 'detailProduct'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'categories', // collection name of Category model
+                        localField: 'category',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'productors', // collection name of Category model
+                        localField: 'productor',
+                        foreignField: '_id',
+                        as: 'productor'
+                      }
+                }
+                ])
+        // await Category.populate(newProduct, {path: "categories"});
+
        
         
        
@@ -81,6 +109,7 @@ exports.getAllProducts = async (req, res) => {
         res.status(500).json({success: false, message: 'Internal server error', api:'get Change router a'});
     }
 }
+
 
 // method GET api/product/:id
 // get All products
@@ -112,18 +141,15 @@ exports.getProductById = async (req, res) => {
 // update information product
 // admin
 exports.updateInformationProduct = async (req, res, next) => {
-  const {name, description, price, currentQuantity, color} = req.body;
-  if(!name || !description || !price || !currentQuantity) {
-      return res.status(400).json({success: false, message: "Missing field"})
+  const {name} = req.body;
+  if(!name) {
+      return res.status(400).json({success: false, message: "Thiếu tên rồi !"})
   }
   try {
     
       let updateInfo = {
           name,
-          description,
-          price,
-          currentQuantity,
-          color
+         
         
       };
       
@@ -150,3 +176,26 @@ exports.updateInformationProduct = async (req, res, next) => {
   }
 }
 
+// method delete api/product/:id
+// delete product
+// admin
+exports.deleteProduct = async (req, res, next) => {
+   
+    try {
+        const deleteProduct = await Product.findOneAndDelete({_id: req.params.id})
+        await cloudinary.uploader.destroy(deleteProduct.cloudinary_id);
+        const deleteDetailProduct = await DetailProduct.find({product: req.params.id})
+        for (let i = 0; i < deleteDetailProduct.length ; i++) {
+            await cloudinary.uploader.destroy(deleteDetailProduct[i].cloudinary_id);
+        }
+        await DetailProduct.deleteMany({product: req.params.id})
+        
+        res.status(200).json({success: true, message: 'Bạn đã xóa sản phẩm thành công !!!'});
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: error
+        });
+    }
+  }

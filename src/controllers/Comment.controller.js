@@ -23,6 +23,7 @@ exports.create = async (req, res) => {
         })
 
         await newComment.save();
+        await newComment.populate('user');
 
         res.status(200).json({
             success: true,
@@ -54,7 +55,7 @@ exports.findByUser = async (req, res) => {
         
         // Neu k tim thay comment
         if(!comment){
-            return res.status(400).json({
+            return res.status(200).json({
                 success: false,
                 message: 'Comment not found'
             })
@@ -93,12 +94,12 @@ exports.update = async (req, res) => {
                 message: 'Comment not found or user not authoriused'
             })
         }
-        if (comment && comment.status === 2) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid comment'
-            })
-        }
+        // if (comment && comment.status === 2) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Invalid comment'
+        //     })
+        // }
 
         let updateComment = {
             rate, content, status: comment.status+1
@@ -107,7 +108,7 @@ exports.update = async (req, res) => {
             _id: commentId,
             user
         }
-        updateComment = await Comment.findOneAndUpdate(updateCondition, updateComment, {new: true});
+        updateComment = await Comment.findOneAndUpdate(updateCondition, updateComment, {new: true}).populate('user');
 
         res.json({
             success: true,
@@ -130,12 +131,15 @@ exports.update = async (req, res) => {
 // @access protected (customer)
 exports.getCommentByProduct = async (req, res) => {
     try {
-      const allComments = await Comment.find({product: req.params.productId}).populate('user',['fullName','image'])
-        
-      res.json({
-        success: true,
-        message: 'Comment update successfully',
-        allComments
+        const allComments = await Comment
+            .find({product: req.params.productId})
+            .populate('user',['fullName','image'])
+            .sort({'createdAt': -1})
+            
+        res.json({
+            success: true,
+            message: 'Comment update successfully',
+            allComments
     })
         
     } catch (error) {
