@@ -33,7 +33,7 @@ exports.register = async (req, res, next) => {
     const {username, password,  gender, fullName} = req.body;
     // simple validation
     if (!username || !password)
-        return res.status(400).json({success:false, message: 'Missing username/password'})
+        return res.status(400).json({success:false, message: 'Tên đăng nhập hoặc mật khẩu không đúng'})
         
     try {
         // check for exiting id
@@ -66,7 +66,7 @@ exports.register = async (req, res, next) => {
         const secret = process.env.ACCESS_TOKEN_SECRECT
         const accessToken = jwt.sign({userId: newUser._id,isAdmin: false},secret )
 
-        res.status(200).json({success: true, message:'User has created successfully', accessToken})
+        res.status(200).json({success: true, message:'Chúc mừng bạn đã đăng ký tài khoản thành công', accessToken})
     } catch (error) {
         console.log(error);
         res.status(500).json({success: false, message: 'Internal server error'})
@@ -78,20 +78,20 @@ exports.login = async (req, res, next) => {
 
     // simple validation
     if (!username || !password)
-        return res.status(400).json({success:false, message: 'Missing username/password'})
+        return res.status(400).json({success:false, message: 'Tên đăng nhập hoặc mật khẩu không đúng'})
 
     try {
         // Check for exiting user
         const user = await User.findOne({username});
     
         if (!user ) {
-            return res.status(400).json({success: false, message: 'Incorrect username or password'});
+            return res.status(400).json({success: false, message: 'Tên đăng nhập hoặc mật khẩu không đúng'});
         }
 
         // Username found
         const passwordValid = await argon2.verify(user.password, password);
         if(!passwordValid) {
-            return res.status(400).json({success: false, message: 'Incorrect username or password'});
+            return res.status(400).json({success: false, message: 'Tên đăng nhập hoặc mật khẩu không đúng'});
         }
 
         // All good
@@ -100,7 +100,7 @@ exports.login = async (req, res, next) => {
         const secret = process.env.ACCESS_TOKEN_SECRECT
         const accessToken = jwt.sign({userId: user._id, isAdmin: user.isAdmin},secret )
   
-        res.status(200).json({success: true, message:'Logged in successfully', accessToken})
+        res.status(200).json({success: true, message:'Đăng nhập thành công', accessToken})
 
     } catch (error) {
         console.log(error);
